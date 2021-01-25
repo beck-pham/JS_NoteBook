@@ -34,13 +34,17 @@ const App = () => {
       entryPoints: ['index.js'],
       bundle: true,
       write: false,
-      plugins: [unpkgPathPlugin()]
+      plugins: [unpkgPathPlugin()],
+      define: {
+        'process.env.NODE_ENV': '"production"', // whenever we find process.env.NODE_ENV, replace it with the 'production' string.
+        global: 'window' // this is set whenever you try to bundling code inside a browser
+      }
     });
 
     console.log(result);
     
     // after transpiling, update the code piece of state that will cause the component to render
-    setCode(result.code);
+    setCode(result.outputFiles[0].text);
   };
 
   return(
