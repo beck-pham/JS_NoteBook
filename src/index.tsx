@@ -1,6 +1,7 @@
 import * as esbuild from 'esbuild-wasm';
 import React, { useState, useEffect, useRef } from 'react'
 import ReactDOM from 'react-dom'
+import { unpkgPathPlugin } from './plugins/unpkg-path-plugin';
 
 const App = () => {
   const ref = useRef<any>();
@@ -25,11 +26,20 @@ const App = () => {
       return;
     }
 
-    const result = await ref.current.transform(input, {
-      loader: 'jsx', // what kind of code
-      target: 'es2015'
+    // const result = await ref.current.transform(input, {
+    //   loader: 'jsx', // what kind of code
+    //   target: 'es2015'
+    // });
+    const result = await ref.current.build({
+      entryPoints: ['index.js'],
+      bundle: true,
+      write: false,
+      plugins: [unpkgPathPlugin()]
     });
 
+    console.log(result);
+    
+    // after transpiling, update the code piece of state that will cause the component to render
     setCode(result.code);
   };
 
