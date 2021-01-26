@@ -1,7 +1,10 @@
 import * as esbuild from 'esbuild-wasm';
 import React, { useState, useEffect, useRef } from 'react'
 import ReactDOM from 'react-dom'
+import { fetchPlugin } from './plugins/fetch-plugin';
 import { unpkgPathPlugin } from './plugins/unpkg-path-plugin';
+
+
 
 const App = () => {
   const ref = useRef<any>();
@@ -26,15 +29,15 @@ const App = () => {
       return;
     }
 
-    // const result = await ref.current.transform(input, {
-    //   loader: 'jsx', // what kind of code
-    //   target: 'es2015'
-    // });
+    // This is where we are kicking off the entire bundling process
     const result = await ref.current.build({
       entryPoints: ['index.js'],
       bundle: true,
       write: false,
-      plugins: [unpkgPathPlugin()],
+      plugins: [
+        unpkgPathPlugin(),
+        fetchPlugin(input) // input = actual value of code when a user input in
+      ], 
       define: {
         'process.env.NODE_ENV': '"production"', // whenever we find process.env.NODE_ENV, replace it with the 'production' string.
         global: 'window' // this is set whenever you try to bundling code inside a browser
