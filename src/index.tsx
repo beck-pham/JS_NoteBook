@@ -1,6 +1,6 @@
 import * as esbuild from 'esbuild-wasm';
-import React, { useState, useEffect, useRef } from 'react'
-import ReactDOM from 'react-dom'
+import React, { useState, useEffect, useRef } from 'react';
+import ReactDOM from 'react-dom';
 import { fetchPlugin } from './plugins/fetch-plugin';
 import { unpkgPathPlugin } from './plugins/unpkg-path-plugin';
 
@@ -8,6 +8,7 @@ import { unpkgPathPlugin } from './plugins/unpkg-path-plugin';
 
 const App = () => {
   const ref = useRef<any>();
+  const iframe = useRef<any>();
   const [input, setInput] = useState(''); // the initial state of code that user write in the <textarea>
   const [code, setCode] = useState(''); // the initial state of esbuild tool code in the <pre> element
 
@@ -44,11 +45,26 @@ const App = () => {
       }
     });
 
-    console.log(result);
-    
+    // console.log(result);
     // after transpiling, update the code piece of state that will cause the component to render
-    setCode(result.outputFiles[0].text);
+    // setCode(result.outputFiles[0].text);
+    iframe.current.contentWindow.postMessage(result.outputFiles[0].text, '*');
   };
+
+  // iframe will execute code inside the script tag
+  const html = `
+    <html>
+      <head></head>
+      <body>
+        <div id="root"></div>
+        <script>
+          window.addEventListener('message', (event) => {
+            eval(event.data);
+          }, false);
+        </script>
+      </body>
+    </html>
+  `;
 
   return(
     <div>
@@ -57,6 +73,7 @@ const App = () => {
         <button onClick={onClick}>Submit</button>
       </div>
       <pre>{code}</pre>
+      <iframe ref={iframe} title='iframe' sandbox ='allow-scripts' srcDoc={html}/>
     </div>
   )
 }
