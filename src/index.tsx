@@ -30,6 +30,9 @@ const App = () => {
       return;
     }
 
+    //resetting iframe to provide code consistency for user experience
+    iframe.current.srcdoc = html;
+
     // This is where we are kicking off the entire bundling process
     const result = await ref.current.build({
       entryPoints: ['index.js'],
@@ -51,6 +54,7 @@ const App = () => {
     iframe.current.contentWindow.postMessage(result.outputFiles[0].text, '*');
   };
 
+  
   // iframe will execute code inside the script tag
   const html = `
     <html>
@@ -59,7 +63,13 @@ const App = () => {
         <div id="root"></div>
         <script>
           window.addEventListener('message', (event) => {
-            eval(event.data);
+            try{
+              eval(event.data);
+            } catch (error) {
+              const root = document.querySelector('#root');
+              root.innerHTML = '<div style="color: red"><h4>Runtime Error</h4>' + error + '</div>'
+              console.error(error);
+            }
           }, false);
         </script>
       </body>
