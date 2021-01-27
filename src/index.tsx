@@ -10,7 +10,7 @@ const App = () => {
   const ref = useRef<any>();
   const iframe = useRef<any>();
   const [input, setInput] = useState(''); // the initial state of code that user write in the <textarea>
-  const [code, setCode] = useState(''); // the initial state of esbuild tool code in the <pre> element
+  //const [code, setCode] = useState(''); // the initial state of esbuild tool code in the <pre> element
 
 
   // startup web assembly
@@ -82,8 +82,8 @@ const App = () => {
       <div>
         <button onClick={onClick}>Submit</button>
       </div>
-      <pre>{code}</pre>
-      <iframe ref={iframe} title='iframe' sandbox ='allow-scripts' srcDoc={html}/>
+      {/* <pre>{code}</pre> */}
+      <iframe ref={iframe} title='preview' sandbox ='allow-scripts' srcDoc={html}/>
     </div>
   )
 }
