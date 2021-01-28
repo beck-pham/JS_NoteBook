@@ -1,8 +1,9 @@
+import './code-editor.css';
 import { useRef } from 'react';
 import MonacoEditor, { EditorDidMount } from '@monaco-editor/react';
 import prettier from 'prettier';
 import parser from 'prettier/parser-babel'; // parser for advanced JS codes
-
+import 'bulmaswatch/nuclear/bulmaswatch.min.css';
 
 
 interface CodeEditorProps {
@@ -36,14 +37,14 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => { 
       useTabs: false,
       semi: true,
       singleQuote: true
-    })
+    }).replace(/\n$/, ''); // this is to remove the new line when click format
     // 3. set the formatted value back into the editor
     editorRef.current.setValue(formatted);
 
   }
   return (
-    <div>
-      <button onClick={onFormatClick}>Format</button>
+    <div className='editor-wrapper'>
+      <button className='button button-format is-primary is-small' onClick={onFormatClick}>Format</button>
       <MonacoEditor
         editorDidMount={onEditorDidMount}
         value={initialValue}
@@ -59,7 +60,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => { 
           scrollBeyondLastLine: false,
           automaticLayout: true
         }}
-      />;
+      />
     </div>
   )  
 };
