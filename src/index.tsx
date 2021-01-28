@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import { fetchPlugin } from './plugins/fetch-plugin';
 import { unpkgPathPlugin } from './plugins/unpkg-path-plugin';
-
+import CodeEditor from './components/code-editor';
 
 
 const App = () => {
@@ -78,6 +78,10 @@ const App = () => {
 
   return(
     <div>
+      <CodeEditor 
+        initialValue='Your code here...'
+        onChange={(value) => setInput(value)}
+      />
       <textarea value ={input} onChange={e => setInput(e.target.value)}></textarea>
       <div>
         <button onClick={onClick}>Submit</button>
