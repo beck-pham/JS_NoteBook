@@ -4,7 +4,7 @@ import { useRef } from 'react';
 import MonacoEditor, { EditorDidMount } from '@monaco-editor/react';
 import prettier from 'prettier';
 import parser from 'prettier/parser-babel'; // parser for advanced JS codes
-import 'bulmaswatch/nuclear/bulmaswatch.min.css';
+import 'bulmaswatch/superhero/bulmaswatch.min.css';
 import codeShift from 'jscodeshift';
 import Highlighter from 'monaco-jsx-highlighter';
 
