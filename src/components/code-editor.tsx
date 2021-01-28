@@ -1,9 +1,13 @@
 import './code-editor.css';
+import './syntax.css';
 import { useRef } from 'react';
 import MonacoEditor, { EditorDidMount } from '@monaco-editor/react';
 import prettier from 'prettier';
 import parser from 'prettier/parser-babel'; // parser for advanced JS codes
 import 'bulmaswatch/nuclear/bulmaswatch.min.css';
+import codeShift from 'jscodeshift';
+import Highlighter from 'monaco-jsx-highlighter';
+
 
 
 interface CodeEditorProps {
@@ -13,7 +17,7 @@ interface CodeEditorProps {
 
 const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => { // tells TS compilier that we gonna provide to CodeEditor a react component that receives any props from this interface.
   const editorRef = useRef<any>();
-  
+
   /** MODULE 125, need descriptive comment */
   const onEditorDidMount: EditorDidMount = (getValue, monacoEditor) => { // annotate of EditorDidMount type
     editorRef.current = monacoEditor;
@@ -23,6 +27,20 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => { 
     });
     // change the tabsize to 2
     monacoEditor.getModel()?.updateOptions( {tabSize: 2 });
+    /*********** THIS IS OPTIONAL: HighLight syntax for JSX ***********/
+    const highlighter = new Highlighter(
+      // @ts-ignore
+      window.monaco,
+      codeShift,
+      monacoEditor
+    );
+    // this will stop console logging every key strokes
+    highlighter.highLightOnDidChangeModelContent(
+      () => {},
+      () => {},
+      undefined,
+      () => {},
+    )
   };
 
 
