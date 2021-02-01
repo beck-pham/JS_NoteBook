@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import bundle from '../bundler';
 import CodeEditor from './code-editor';
 import Preview from './preview';
@@ -9,22 +9,27 @@ const CodeCell = () => {
   const [input, setInput] = useState(''); // the initial state of code that user write in the <textarea>
   const [code, setCode] = useState(''); // the initial state of esbuild tool code in the <pre> element
   
-  const onClick = async() => {
-    const output = await bundle(input);
-    setCode(output);
-  };
+  // if a user stop typing for 1 sec, the result of the code will be automatically execute
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      const output = await bundle(input);
+      setCode(output);
+    }, 1000);
+
+    return () => {
+      clearTimeout(timer);
+    }
+  }, [input])
 
   return (
     <Resizable direction='vertical'>
       <div style={{ height: '100%', display: 'flex', flexDirection: 'row' }}>
-        <CodeEditor 
-          initialValue='Your code here...'
-          onChange={(value) => setInput(value)}
-        />
-        {/* <textarea value ={input} onChange={e => setInput(e.target.value)}></textarea>
-        <div>
-          <button onClick={onClick}>Submit</button>
-        </div> */}
+        <Resizable direction='horizontal'>
+          <CodeEditor 
+            initialValue='Your code here...'
+            onChange={(value) => setInput(value)}
+          />
+        </Resizable>
         <Preview code={code} />
       </div>
     </Resizable>

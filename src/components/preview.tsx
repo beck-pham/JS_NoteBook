@@ -8,7 +8,9 @@ interface PreviewProps {
 // iframe will execute code inside the script tag
 const html = `
   <html>
-    <head></head>
+    <head>
+      <style>html { background-color: white; }</style>
+    </head>
     <body>
       <div id="root"></div>
       <script>
@@ -34,7 +36,9 @@ const Preview: React.FC<PreviewProps> = ({ code }) => {
     //resetting iframe to provide code consistency for user experience
     iframe.current.srcdoc = html;
     // post the code into the iframe
-    iframe.current.contentWindow.postMessage(code, '*');
+    setTimeout(() => {
+      iframe.current.contentWindow.postMessage(code, '*');
+    }, 50);
   }, [code]);
   return (
     <div className='preview-wrapper'>
