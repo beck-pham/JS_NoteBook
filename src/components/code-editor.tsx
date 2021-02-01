@@ -68,7 +68,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => { 
         value={initialValue}
         theme="dark" 
         language="javascript" 
-        height="50rem"
+        height="100%"
         options={{
           wordWrap: 'on', // When `wordWrap` = "on", the lines will wrap at the viewport width.
           minimap: { enabled: false },

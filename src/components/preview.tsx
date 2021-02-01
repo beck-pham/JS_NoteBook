@@ -1,5 +1,5 @@
 import { useRef, useEffect } from 'react';
-
+import './preview.css';
 
 interface PreviewProps {
   code: string;
@@ -37,12 +37,14 @@ const Preview: React.FC<PreviewProps> = ({ code }) => {
     iframe.current.contentWindow.postMessage(code, '*');
   }, [code]);
   return (
-    <iframe 
-      ref={iframe} 
-      title='preview' 
-      sandbox ='allow-scripts' 
-      srcDoc={html}
-    />
+    <div className='preview-wrapper'>
+      <iframe 
+        ref={iframe} 
+        title='preview' 
+        sandbox ='allow-scripts' 
+        srcDoc={html}
+      />
+    </div>
   ); 
 }
 
