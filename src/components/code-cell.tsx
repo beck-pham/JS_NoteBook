@@ -8,12 +8,13 @@ import Resizable from './resizable';
 const CodeCell = () => {
   const [input, setInput] = useState(''); // the initial state of code that user write in the <textarea>
   const [code, setCode] = useState(''); // the initial state of esbuild tool code in the <pre> element
-  
+  const [err, setErr] = useState('');
   // if a user stop typing for 1 sec, the result of the code will be automatically execute
   useEffect(() => {
     const timer = setTimeout(async () => {
       const output = await bundle(input);
-      setCode(output);
+      setCode(output.code);
+      setErr(output.err);
     }, 1000);
 
     return () => {
@@ -30,7 +31,7 @@ const CodeCell = () => {
             onChange={(value) => setInput(value)}
           />
         </Resizable>
-        <Preview code={code} />
+        <Preview code={code} err={err}/>
       </div>
     </Resizable>
   )
