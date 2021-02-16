@@ -1,14 +1,19 @@
 import { useState, useEffect, useRef } from 'react';
 import MDEditor from '@uiw/react-md-editor';
 import './text-editor.css';
+import { Cell } from '../state';
+import { useActions } from '../hooks/use-actions';
 
-const TextEditor: React.FC = () => {
-  const [editing, setEditing] = useState(false);
-  const [value, setValue] = useState('# HEADER');
+interface TextEditorProps {
+  cell: Cell;
+}
+
+const TextEditor: React.FC<TextEditorProps> = ({ cell }) => {
   //type annotation of HTML or Null with default starting value of Null
   const ref = useRef<HTMLDivElement | null > (null);
-
-
+  const [editing, setEditing] = useState(false);
+  // const [value, setValue] = useState('# HEADER');
+  const { updateCell } = useActions();
   // The solution here is going to be comparing whether or not that element is the element the user just clicked on is inside of that div.
   // If it is inside, we're not going to flip the value of editing.
   // Otherwise, if it is outside, we will update editing to be false.
@@ -33,7 +38,7 @@ const TextEditor: React.FC = () => {
   if (editing) {
     return(
       <div className='text-editor' ref={ref}>
-        <MDEditor value={value} onChange={(value) => setValue(value || '')}/>
+        <MDEditor value={cell.content} onChange={(value) => updateCell(cell.id, value || '')}/>
       </div>
     );
   }
@@ -41,7 +46,7 @@ const TextEditor: React.FC = () => {
   return (
     <div className='text-editor card' onClick={() => setEditing(true)}>
       <div className='card-content'>
-        <MDEditor.Markdown source={value} />
+        <MDEditor.Markdown source={cell.content || 'Click to edit'} />
       </div>
     </div>
   )
